@@ -1,0 +1,38 @@
+version: "3.7"
+
+services:
+  node-red:
+    image: nodered/node-red:latest
+    environment:
+      - TZ=America/Chicago
+    ports:
+      - "1880:1880"
+    networks:
+      - node-red-net
+    volumes:
+      - node-red-data:/data
+  mosquitto:
+    image: eclipse-mosquitto
+    environment:
+      - TZ=America/Chicago
+    hostname: mosquitto
+    ports:
+      - "1883:1883"
+      - "9001:9001"
+    networks:
+      - node-red-net
+    volumes:
+      - ./mosquitto-config:/mosquitto/config:rw
+      - mosquitto-data:/mosquitto/data
+      - mosquitto-log:/mosquitto/log
+    restart: always
+    
+
+volumes:
+  node-red-data:
+  mosquitto-data:
+  mosquitto-config:
+  mosquitto-log:
+
+networks:
+  node-red-net:
